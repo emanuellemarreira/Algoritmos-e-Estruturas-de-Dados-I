@@ -4,10 +4,10 @@
 
 int main(){
 	RETANGULO *meuret;
+	meuret = cria_retangulo();
 	if(meuret == NULL){
 		return -1;
 	}
-	meuret = cria_retangulo();
 	tam(meuret);
 	area(meuret);
 	volume(meuret);
