@@ -5,6 +5,9 @@
 //inicializacao
 RETANGULO *cria_retangulo(){
 	RETANGULO *ret = malloc(sizeof(RETANGULO));
+	
+
+
 	ret->larg = 2;
 	ret->alt = 3;
 	ret->comp = 4;
