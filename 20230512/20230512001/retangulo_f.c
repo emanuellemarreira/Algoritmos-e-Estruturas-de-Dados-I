@@ -5,12 +5,12 @@
 //inicializacao
 RETANGULO *cria_retangulo(){
 	RETANGULO *ret = malloc(sizeof(RETANGULO));
-	
-
-
-	ret->larg = 2;
-	ret->alt = 3;
-	ret->comp = 4;
+	printf("largura: ");
+	scanf("%f", &ret->larg);
+	printf("altura: ");
+	scanf("%f", &ret->alt);
+	printf("comprimento: ");
+	scanf("%f", &ret->comp);
 	return ret;
 }
 
