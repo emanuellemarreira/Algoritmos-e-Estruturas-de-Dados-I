@@ -1,6 +1,6 @@
 #ifndef LLEST2OK_H_INCLUDED
 #define LLEST2OK_H_INCLUDED
-#define TAM 100
+#define TAMANHO_MAX 100
 typedef struct {
     int valor;
     int proximo; // Índice do próximo elemento na lista
