@@ -1,79 +1,104 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "llest2.h"
-void inserirFim(Lista *lista, int valor){
-	No *novo = malloc(sizeof(No));//cria um novo nó
-	novo->valor = valor;
-	novo->proximo = NULL;//define o proximo como ultimo
-	if(lista->inicio == NULL){//se a lista estiver vazia
-		lista->inicio = novo;
-		lista->fim = novo;
-	}else{//lista nao vazia
-		lista->fim->proximo = novo;
-		lista->fim = novo;
-	}
+#include "llest2ok.h"
+
+void inicializar(Lista *lista) {
+    lista->inicio = -1;
+    lista->livre = 0;
 }
-// remover um elemento da lista
+
+int obterNoLivre(Lista *lista) {
+    int indice = lista->livre;
+    lista->livre++;
+    return indice;
+}
+
+void inserirFim(Lista *lista, int valor) {
+    int novoIndice = obterNoLivre(lista);
+    No *novo = &(lista->elementos[novoIndice]);
+    novo->valor = valor;
+    novo->proximo = -1;
+
+    if (lista->inicio == -1) {
+        lista->inicio = novoIndice;
+    } else {
+        No *ultimo = &(lista->elementos[lista->inicio]);
+        while (ultimo->proximo != -1) {
+            ultimo = &(lista->elementos[ultimo->proximo]);
+        }
+        ultimo->proximo = novoIndice;
+    }
+}
+void inserirInicio(Lista *lista, int valor) {
+    int novoIndice = obterNoLivre(lista);
+    No *novo = &(lista->elementos[novoIndice]);
+    novo->valor = valor;
+    novo->proximo = lista->inicio;
+
+    lista->inicio = novoIndice;
+}
+
+
 void remover(Lista *lista, int valor) {
-    No *inicio = lista->inicio; // ponteiro para o início da lista
-    No * noARemover = NULL; // ponteiro para o nó a ser removido
+    int atualIndice = lista->inicio;
+    int anteriorIndice = -1;
 
-    if(inicio != NULL && lista->inicio->valor == valor) { // remover 1º elemento
-        noARemover = lista->inicio;
-        lista->inicio = noARemover->proximo;
-        if(lista->inicio == NULL)
-            lista->fim = NULL;
-    } else { // remoção no meio ou no final
-        while(inicio != NULL && inicio->proximo != NULL && inicio->proximo->valor != valor) {
-            inicio = inicio->proximo;
+    while (atualIndice != -1) {
+        No *atual = &(lista->elementos[atualIndice]);
+
+        if (atual->valor == valor) {
+            if (anteriorIndice == -1) {
+                lista->inicio = atual->proximo;
+            } else {
+                No *anterior = &(lista->elementos[anteriorIndice]);
+                anterior->proximo = atual->proximo;
+            }
+            break;
         }
-        if(inicio != NULL && inicio->proximo != NULL) {
-            noARemover = inicio->proximo;
-            inicio->proximo = noARemover->proximo;
-            if(inicio->proximo == NULL) // se o último elemento for removido
-                lista->fim = inicio;
+
+        anteriorIndice = atualIndice;
+        atualIndice = atual->proximo;
+    }
+}
+
+void imprimir(Lista *lista) {
+    int indice = lista->inicio;
+    while (indice != -1) {
+        No *atual = &(lista->elementos[indice]);
+        printf("\nlista = %d", atual->valor);
+        indice = atual->proximo;
+    }
+}
+
+void a(Lista *l, Lista *l1) {
+    if (l->inicio != -1) {
+        int prim = l->inicio;
+        int atual = l->elementos[prim].proximo;//recebe o segundo
+
+        while (atual != -1) {
+            inserirFim(l1, l->elementos[atual].valor);
+            atual = l->elementos[atual].proximo;
         }
-    }
-    if(noARemover) {
-        free(noARemover); // libera a memória do nó
-    }
-}
 
-
-void imprimir(Lista *lista){
-	No *inicio = lista->inicio;
-	while(inicio != NULL){
-		printf("\nlista= %d", inicio->valor);
-		inicio = inicio->proximo;
-	}
-}
-void a(Lista *l, Lista *l1){
-	No *inicio = l->inicio;
-	//No *inicio1 = l1->inicio;
-	while(inicio != NULL){
-		inserirFim(l1,inicio->valor);
-		inicio = inicio->proximo;
-	}
-	inserirFim(l1,l->inicio->valor);
-	remover(l1,l1->inicio->valor);
-}
-
-void b(Lista *l, Lista *l1){
-    No *inicio = l->inicio;
-    Lista listaAuxiliar; // Lista auxiliar para armazenar temporariamente os elementos
-
-    listaAuxiliar.inicio = NULL;
-    listaAuxiliar.fim = NULL;
-
-    while (inicio != NULL) {
-        inserirFim(&listaAuxiliar, inicio->valor); // Inserir os elementos na lista auxiliar e com & pq criei na funcao
-        inicio = inicio->proximo;
-    }
-
-    while (listaAuxiliar.inicio != NULL) {
-        inserirFim(l1, listaAuxiliar.fim->valor); // Inserir os elementos na lista l1 de trás para frente
-        remover(&listaAuxiliar, listaAuxiliar.fim->valor); // Remover o elemento inserido da lista auxiliar, pq removendo o fim vai virar o penultimo e assim por diante
+        inserirFim(l1, l->elementos[prim].valor);
     }
 }
 
+void b(Lista *l, Lista *l1) {
+    int indice = l->inicio;
+    Lista listaAuxiliar;
+    inicializar(&listaAuxiliar);
 
+    while (indice != -1) {
+        No *atual = &(l->elementos[indice]);
+        inserirFim(&listaAuxiliar, atual->valor);
+        indice = atual->proximo;
+    }
+
+    indice = listaAuxiliar.inicio;
+    while (indice != -1) {
+        No *atual = &(listaAuxiliar.elementos[indice]);
+        inserirInicio(l1, atual->valor); 
+        indice = atual->proximo;
+    }
+}
