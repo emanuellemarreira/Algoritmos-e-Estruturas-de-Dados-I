@@ -1,55 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define "llest3.h"
-void inserirFim(Lista *lista, int valor){
-	No *novo = malloc(sizeof(No));//cria um novo nó
-	novo->valor = valor;
-	novo->proximo = NULL;//define o proximo como ultimo
-	if(lista->inicio == NULL){//se a lista estiver vazia
-		lista->inicio = novo;
-		lista->fim = novo;
-	}else{//lista nao vazia
-		lista->fim->proximo = novo;
-		lista->fim = novo;
-	}
-}
-void copiarlista(Lista *l, Lista *l1){
-	No *inicio = l->inicio;
-	while(inicio != NULL){
-		inserirFim(l1,inicio->valor);
-		inicio = inicio->proximo;
-	}
-}
-void concatenar(Lista *l, Lista *l1){
-	No *inicio = l->fim;
-	No *inicio2 = l1->inicio;
-	while(inicio2 != NULL){
-		inserirFim(l,inicio2->valor);
-		inicio = inicio->proximo;
-		inicio2 = inicio2->proximo;
-	}
-}
-void intercalar(Lista *l, Lista *l1, Lista *l2){
-	No *inicio = l->inicio;
-	No *inicio1 = l1->inicio;
-	int cont=0;
-	
-	while(inicio != NULL && inicio1 != NULL){
-	    if(cont%2==0){
-	    	inserirFim(l2, inicio->valor);
-	    	inicio = inicio->proximo;
-		}else{
-			inserirFim(l2, inicio1->valor);
-			inicio1 = inicio1->proximo;
-		}
-		cont++;
-	}
-}
-void imprimir(Lista *lista){
-	No *inicio = lista->inicio;
-	while(inicio != NULL){
-		printf("\nlista= %d", inicio->valor);
-		inicio = inicio->proximo;
-	}
+#include "llest3ok.h"
+
+void inicializar(Lista *lista) {
+    lista->inicio = -1;
+    lista->livre = 0;
 }
 
+int obterNoLivre(Lista *lista) {
+    int indice = lista->livre;
+    lista->livre++;
+    return indice;
+}
+
+void inserirFim(Lista *lista, int valor) {
+    int novoIndice = obterNoLivre(lista);
+    No *novo = &(lista->elementos[novoIndice]);
+    novo->valor = valor;
+    novo->proximo = -1;
+
+    if (lista->inicio == -1) {
+        lista->inicio = novoIndice;
+    } else {
+        No *ultimo = &(lista->elementos[lista->inicio]);
+        while (ultimo->proximo != -1) {
+            ultimo = &(lista->elementos[ultimo->proximo]);
+        }
+        ultimo->proximo = novoIndice;
+    }
+}
+
+void remover(Lista *lista, int valor) {
+    int atualIndice = lista->inicio;
+    int anteriorIndice = -1;
+
+    while (atualIndice != -1) {
+        No *atual = &(lista->elementos[atualIndice]);
+
+        if (atual->valor == valor) {
+            if (anteriorIndice == -1) {
+                lista->inicio = atual->proximo;
+            } else {
+                No *anterior = &(lista->elementos[anteriorIndice]);
+                anterior->proximo = atual->proximo;
+            }
+            break;
+        }
+
+        anteriorIndice = atualIndice;
+        atualIndice = atual->proximo;
+    }
+}
+
+void imprimir(Lista *lista) {
+    int indice = lista->inicio;
+    while (indice != -1) {
+        No *atual = &(lista->elementos[indice]);
+        printf("\nlista = %d", atual->valor);
+        indice = atual->proximo;
+    }
+}
+
+void copiarLista(Lista *l1, Lista *l2){
+	int indice = l1->inicio;
+	while(indice != -1){
+		No *atual = &(l1->elementos[indice]);
+		inserirFim(l2, l1->elementos[indice].valor);
+		indice = atual->proximo;
+	}
+}
+void concatenarLista(Lista *l1, Lista *l2){
+	int indice = l2->inicio;
+	while(indice != -1){
+		No *atual = &(l2->elementos[indice]);
+		inserirFim(l1, l2->elementos[indice].valor);
+		indice = atual->proximo;
+	}
+}
+Lista intercalarListas(Lista *l1, Lista *l2)
+{
+    Lista listaIntercalada;
+    inicializar(&listaIntercalada);
+
+    int atualL1 = l1->inicio;
+    int atualL2 = l2->inicio;
+
+    while (atualL1 != -1 && atualL2 != -1)
+    {
+        inserirFim(&listaIntercalada, l1->elementos[atualL1].valor);
+        inserirFim(&listaIntercalada, l2->elementos[atualL2].valor);
+
+        atualL1 = l1->elementos[atualL1].proximo;
+        atualL2 = l2->elementos[atualL2].proximo;
+    }
+
+    return listaIntercalada;
+}
