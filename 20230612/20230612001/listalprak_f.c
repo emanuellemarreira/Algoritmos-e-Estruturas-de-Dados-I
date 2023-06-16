@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "listalprak.h"
-
 void inicializar_lista(Lista* lista) {
     lista->inicio = NULL;
 }
@@ -19,6 +18,12 @@ void inserir_elemento(Lista* lista, int valor) {
     lista->inicio = novo_no;
 }
 
+void inserir_emk(Lista* lista, No* inserir) {
+    inserir->proximo = lista->inicio;
+    lista->inicio = inserir;
+    inserir->anterior = NULL;
+}
+
 int buscar_maior_elemento(Lista* lista) {
     No* no = lista->inicio;
     int maior = no->valor;
@@ -33,30 +38,43 @@ int buscar_maior_elemento(Lista* lista) {
     return maior;
 }
 
-void remover_elemento(Lista* lista, No* no) {
-    if (lista->inicio == no) {
-        lista->inicio = no->proximo;
+No* buscaElem_e_Pred(Lista* m, int valor, No** pred) {
+    *pred = NULL;
+    No* atual = m->inicio;
+    while ((atual != NULL) && atual->valor < valor) {
+        *pred = atual;
+        atual = atual->proximo;
     }
-
-    if (no->proximo != NULL) {
-        no->proximo->anterior = no->anterior;
+    if ((atual != NULL) && (atual->valor == valor)) {
+        return atual;
     }
+    return NULL;
+}
 
-    if (no->anterior != NULL) {
-        no->anterior->proximo = no->proximo;
+No* remover_elemento(Lista* lista, int valor) {
+    No* pred;
+    No* i;
+    i = buscaElem_e_Pred(lista, valor, &pred);
+    if (i == NULL) {
+        return NULL;
     }
-
-    free(no);
+    if (pred != NULL) {
+        pred->proximo = i->proximo;
+    } else {
+        lista->inicio = i->proximo;
+    }
+    return i;
 }
 
 void armazenar_maior_elemento(Lista* L, Lista* K) {
-    int maior = buscar_maior_elemento(L);
     No* no = L->inicio;
+    No* armazenar = NULL;
+    int maior = buscar_maior_elemento(L);
 
     while (no != NULL) {
         if (no->valor == maior) {
-            remover_elemento(L, no);
-            inserir_elemento(K, maior);
+            armazenar = remover_elemento(L, maior);
+            inserir_emk(K, armazenar);
             break;
         }
         no = no->proximo;
@@ -71,5 +89,3 @@ void imprimir_lista(Lista* lista) {
     }
     printf("\n");
 }
-
-
