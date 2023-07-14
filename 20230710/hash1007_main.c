@@ -1,0 +1,81 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "hash1007.h"
+
+int main(){
+		int colisoes=0;
+	Elemento e;
+	printf("\n==Sondagem linear==\n");
+	tbhash h;
+	inicializarHash(h);
+	e.valor = 365;
+	colisoes += sondagem_linear(h, e);
+	e.valor = 112;
+	colisoes += sondagem_linear(h, e);
+	e.valor = 180;
+	colisoes += sondagem_linear(h, e);
+	e.valor = 213;
+	colisoes += sondagem_linear(h, e);
+	e.valor = 13;
+	colisoes += sondagem_linear(h, e);
+	e.valor = 27;
+	colisoes += sondagem_linear(h, e);
+	imprimeHash(h);
+	printf("\n--colisoes sondagem linear = %d--\n", colisoes);
+	colisoes = 0;
+	printf("\n==Sondagem quadratica==\n");
+	tbhash h1;
+	inicializarHash(h1);
+	e.valor = 365;
+	colisoes += sondagem_quadratica(h1, e);
+	e.valor = 112;
+	colisoes += sondagem_quadratica(h1, e);
+	e.valor = 180;
+	colisoes += sondagem_quadratica(h1, e);
+	e.valor = 213;
+	colisoes += sondagem_quadratica(h1, e);
+	e.valor = 13;
+	colisoes += sondagem_quadratica(h1, e);
+	e.valor = 27;
+	colisoes += sondagem_quadratica(h1, e);
+	imprimeHash(h1);
+	printf("\n--colisoes sondagem quadratica = %d--\n", colisoes);
+	colisoes = 0;
+	printf("\n==Sondagem quadratica 2==\n");
+	tbhash h2;
+	inicializarHash(h2);
+	e.valor = 365;
+	colisoes += sondagem_quadratica2(h2, e);
+	e.valor = 112;
+	colisoes += sondagem_quadratica2(h2, e);
+	e.valor = 180;
+	colisoes += sondagem_quadratica2(h2, e);
+	e.valor = 213;
+	colisoes += sondagem_quadratica2(h2, e);
+	e.valor = 13;
+	colisoes += sondagem_quadratica2(h2, e);
+	e.valor = 27;
+	colisoes += sondagem_quadratica2(h2, e);
+	imprimeHash(h2);
+	printf("\n--colisoes sondagem quadratica 2= %d--\n", colisoes);
+	colisoes = 0;
+	printf("\n==Hash duplo==\n");
+	tbhash h3;
+	inicializarHash(h3);
+	e.valor = 365;
+	colisoes += hash_duplo(h3, e);
+	e.valor = 112;
+	colisoes += hash_duplo(h3, e);
+	e.valor = 180;
+	colisoes += hash_duplo(h3, e);
+	e.valor = 213;
+	colisoes += hash_duplo(h3, e);
+	e.valor = 13;
+	colisoes += hash_duplo(h3, e);
+	e.valor = 27;
+	colisoes += hash_duplo(h3, e);
+	imprimeHash(h3);
+	printf("\n--colisoes hashduplo= %d--\n", colisoes);
+	return 0;
+
+}
