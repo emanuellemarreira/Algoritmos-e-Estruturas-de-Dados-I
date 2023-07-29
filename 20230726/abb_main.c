@@ -14,7 +14,7 @@ int main(){
 	adicionarArvore(&a, 35);
 	imprimirArvore(&a);
 	No* busca = malloc(sizeof(No));
-	busca = buscar(&a, 14);
+	busca = buscar(&a, 12);
 	printf("\nbusca\nendereco:%p  esq:%p  dir:%p  num:%d", busca, busca->esquerda, busca->direita, busca->valor);
 	printf("\nquantidade de nos: %d", contarNos(a.raiz));
 	printf("\n=Pre ordem==\n");
