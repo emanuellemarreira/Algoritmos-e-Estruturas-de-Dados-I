@@ -5,9 +5,13 @@
 int main(){
 	ARVORE a;
 	inicializarArvore(&a);
-	adicionarArvore(&a, 9);
+	adicionarArvore(&a, 24);
+	adicionarArvore(&a, 10);
+	adicionarArvore(&a, 32);
 	adicionarArvore(&a, 5);
-	adicionarArvore(&a, 14);
+	adicionarArvore(&a, 12);
+	adicionarArvore(&a, 29);
+	adicionarArvore(&a, 35);
 	imprimirArvore(&a);
 	No* busca = malloc(sizeof(No));
 	busca = buscar(&a, 14);
