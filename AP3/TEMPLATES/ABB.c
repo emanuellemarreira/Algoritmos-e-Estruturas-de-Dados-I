@@ -23,6 +23,13 @@ void destruirArvore(No* a) {
     }
 }
 
+int quantidadeNos(No* raiz){
+	if (raiz == NULL){
+		return 0;
+	}
+	return quantidadeNos(raiz->esquerda)+quantidadeNos(raiz->direita)+1;
+}
+
 No* inserirNo(No* raiz, No* no) {
     if (raiz == NULL) {
         return no;
@@ -193,6 +200,48 @@ int profundidade(No* raiz, int valor, int cont) {
     }
 }
 
+void listarNos(No* raiz){
+	if(raiz!=NULL){
+		printf("Endereco: %p\n", raiz);
+		printf("Esquerda: %p  Direita:%p\n", raiz->esquerda, raiz->direita);
+		printf("Valor: %d\n", raiz->valor);
+		listarNos(raiz->esquerda);
+		listarNos(raiz->direita);
+	}
+}
+
+void imprimirArvore(ARVORE *a){
+	listarNos(a->raiz);
+}
+
+No* pre_ordem(No* raiz){//raiz  esquerda  direita
+	if(raiz == NULL){
+		return NULL;
+	}
+	printf("%d\n", raiz->valor);
+	pre_ordem(raiz->esquerda);
+	pre_ordem(raiz->direita);	
+}
+
+No* in_ordem(No* raiz){//esquerda  raiz   direita
+	if(raiz == NULL){
+		return NULL;
+	}
+	in_ordem(raiz->esquerda);
+	printf("%d\n", raiz->valor);
+	in_ordem(raiz->direita);
+}
+
+No* pos_ordem(No* raiz){//esquerda   direita  raiz
+	if(raiz == NULL){
+		return NULL;
+	}
+	pos_ordem(raiz->esquerda);
+	pos_ordem(raiz->direita);
+	printf("%d\n", raiz->valor);
+}
+
+
 int main() {
     ARVORE minhaArvore;
     inicializarArvore(&minhaArvore);
@@ -207,6 +256,7 @@ int main() {
     adicionarArvore(&minhaArvore, 10);
     adicionarArvore(&minhaArvore, 15);
     printf("\naltura = %d\n", altura(minhaArvore.raiz));
+    printf("\nqtd nos = %d\n", quantidadeNos(minhaArvore.raiz));
     int cont = 0;
     printf("\nprofundidade = %d\n", profundidade(minhaArvore.raiz, 14, cont));
     printf("\nPercurso em largura:\n");
